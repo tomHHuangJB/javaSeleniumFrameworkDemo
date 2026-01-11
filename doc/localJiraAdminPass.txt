@@ -1,0 +1,2 @@
+ tomhuang@Toms-MacBook-Pro javaSeleniumFrameworkDemo % docker exec java-selenium-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+  5fdb89a17f6b4646bdf2ab13b8948106
