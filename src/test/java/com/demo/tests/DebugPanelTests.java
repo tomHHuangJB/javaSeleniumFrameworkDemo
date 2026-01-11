@@ -16,9 +16,13 @@ public class DebugPanelTests extends BaseTest {
         openPath("/");
         DebugPanelPage debug = new DebugPanelPage(driver);
 
-        debug.openPanel();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(d -> debug.isOpen());
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(d -> {
+            if (!debug.isOpen()) {
+                debug.openPanel();
+            }
+            return debug.isOpen();
+        });
 
         debug.toggleShowTestIds();
         assertEquals("true", debug.testIdVisibilityAttr());

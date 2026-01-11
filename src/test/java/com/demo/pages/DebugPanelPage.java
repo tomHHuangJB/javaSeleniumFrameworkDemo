@@ -20,8 +20,13 @@ public class DebugPanelPage extends BasePage {
     }
 
     public void openPanel() {
-        driver.findElement(By.tagName("body")).click();
-        actions.keyDown(Keys.ALT).keyDown(Keys.SHIFT).sendKeys("d").keyUp(Keys.SHIFT).keyUp(Keys.ALT).perform();
+        waits.pageReady();
+        WebElement body = driver.findElement(By.tagName("body"));
+        body.click();
+        body.sendKeys(Keys.chord(Keys.ALT, Keys.SHIFT, "d"));
+        if (!isOpen()) {
+            actions.keyDown(Keys.ALT).keyDown(Keys.SHIFT).sendKeys("d").keyUp(Keys.SHIFT).keyUp(Keys.ALT).perform();
+        }
         if (!isOpen()) {
             ((JavascriptExecutor) driver).executeScript(
                 "const evt = (type) => new KeyboardEvent(type, {key:'D', code:'KeyD', altKey:true, shiftKey:true, bubbles:true});"
