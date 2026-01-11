@@ -60,6 +60,18 @@ jobs:
       - name: Run tests
         run: mvn -q test -Dbase.url=$BASE_URL -Dbrowser=$BROWSER -Dheadless=$HEADLESS
 
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-artifacts
+          path: |
+            target/surefire-reports
+            target/screenshots
+            target/*.dump
+            target/*-jvmRun*.dump
+            target/*.dumpstream
+
       - name: Shutdown LocalAutomationApp
         if: always()
         run: |
