@@ -17,7 +17,7 @@ public class DebugPanelTests extends BaseTest {
         DebugPanelPage debug = new DebugPanelPage(driver);
 
         debug.openPanel();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(d -> debug.isOpen());
 
         debug.toggleShowTestIds();

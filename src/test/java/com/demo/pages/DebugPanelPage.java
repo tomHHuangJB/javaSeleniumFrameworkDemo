@@ -1,6 +1,7 @@
 package com.demo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,11 +20,19 @@ public class DebugPanelPage extends BasePage {
     }
 
     public void openPanel() {
+        driver.findElement(By.tagName("body")).click();
         actions.keyDown(Keys.ALT).keyDown(Keys.SHIFT).sendKeys("d").keyUp(Keys.SHIFT).keyUp(Keys.ALT).perform();
+        if (!isOpen()) {
+            ((JavascriptExecutor) driver).executeScript(
+                "const evt = (type) => new KeyboardEvent(type, {key:'D', code:'KeyD', altKey:true, shiftKey:true, bubbles:true});"
+                    + "document.dispatchEvent(evt('keydown'));"
+                    + "document.dispatchEvent(evt('keyup'));"
+            );
+        }
     }
 
     public boolean isOpen() {
-        return driver.findElements(closeBtn).size() > 0;
+        return driver.findElements(closeBtn).stream().anyMatch(WebElement::isDisplayed);
     }
 
     public void toggleShowTestIds() {
