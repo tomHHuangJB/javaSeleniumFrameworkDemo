@@ -2,12 +2,14 @@ package com.demo.pages;
 
 import com.demo.core.Waits;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.TimeoutException;
 
 public abstract class BasePage {
     protected final WebDriver driver;
@@ -29,7 +31,13 @@ public abstract class BasePage {
     }
 
     protected void click(By locator) {
-        waits.clickable(locator).click();
+        WebElement element = waits.visible(locator);
+        scrollIntoView(element);
+        try {
+            waits.clickable(locator).click();
+        } catch (ElementClickInterceptedException | TimeoutException e) {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        }
     }
 
     protected void type(By locator, String text) {
@@ -57,5 +65,12 @@ public abstract class BasePage {
     protected void jsClick(By locator) {
         WebElement element = waits.visible(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
+    private void scrollIntoView(WebElement element) {
+        ((JavascriptExecutor) driver).executeScript(
+            "arguments[0].scrollIntoView({block:'center', inline:'center'});",
+            element
+        );
     }
 }

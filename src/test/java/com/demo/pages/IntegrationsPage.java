@@ -15,8 +15,12 @@ public class IntegrationsPage extends BasePage {
     public void approvePaymentInIframe() {
         WebElement iframe = get(paymentIframe);
         driver.switchTo().frame(iframe);
-        driver.findElement(By.tagName("button")).click();
+        waits.clickable(By.tagName("button")).click();
         driver.switchTo().defaultContent();
+    }
+
+    public void waitForMessageContains(String text) {
+        waits.textContains(iframeMessage, text);
     }
 
     public String messageText() {

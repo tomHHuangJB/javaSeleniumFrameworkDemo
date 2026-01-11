@@ -13,6 +13,7 @@ public class IntegrationsTests extends BaseTest {
         openPath("/integrations");
         IntegrationsPage integrations = new IntegrationsPage(driver);
         integrations.approvePaymentInIframe();
+        integrations.waitForMessageContains("payment-approved");
         assertTrue(integrations.messageText().contains("payment-approved"));
     }
 }
