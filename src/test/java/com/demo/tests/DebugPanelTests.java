@@ -14,6 +14,7 @@ public class DebugPanelTests extends BaseTest {
     @Test
     void debugPanelToggles() {
         openPath("/");
+        waitForAppReady();
         DebugPanelPage debug = new DebugPanelPage(driver);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
