@@ -5,6 +5,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DebugPanelPage extends BasePage {
     private final By closeBtn = testId("debug-close");
@@ -29,10 +33,25 @@ public class DebugPanelPage extends BasePage {
         }
         if (!isOpen()) {
             ((JavascriptExecutor) driver).executeScript(
-                "const evt = (type) => new KeyboardEvent(type, {key:'D', code:'KeyD', altKey:true, shiftKey:true, bubbles:true});"
+                "const evt = (type) => new KeyboardEvent(type, {key:'D', code:'KeyD', keyCode:68, which:68, altKey:true, shiftKey:true, bubbles:true, cancelable:true});"
                     + "document.dispatchEvent(evt('keydown'));"
                     + "document.dispatchEvent(evt('keyup'));"
+                    + "window.dispatchEvent(evt('keydown'));"
+                    + "window.dispatchEvent(evt('keyup'));"
             );
+        }
+        if (!isOpen() && driver instanceof ChromeDriver) {
+            // Linux can intercept Alt+Shift; CDP dispatch is a reliable fallback in headless CI.
+            Map<String, Object> params = new HashMap<>();
+            params.put("type", "keyDown");
+            params.put("key", "D");
+            params.put("code", "KeyD");
+            params.put("keyCode", 68);
+            params.put("windowsVirtualKeyCode", 68);
+            params.put("modifiers", 9);
+            ((ChromeDriver) driver).executeCdpCommand("Input.dispatchKeyEvent", params);
+            params.put("type", "keyUp");
+            ((ChromeDriver) driver).executeCdpCommand("Input.dispatchKeyEvent", params);
         }
     }
 
