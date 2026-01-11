@@ -42,17 +42,46 @@ public class DebugPanelPage extends BasePage {
         }
         if (!isOpen() && driver instanceof ChromeDriver) {
             // Linux can intercept Alt+Shift; CDP dispatch is a reliable fallback in headless CI.
-            Map<String, Object> params = new HashMap<>();
-            params.put("type", "keyDown");
-            params.put("key", "D");
-            params.put("code", "KeyD");
-            params.put("keyCode", 68);
-            params.put("windowsVirtualKeyCode", 68);
-            params.put("modifiers", 9);
-            ((ChromeDriver) driver).executeCdpCommand("Input.dispatchKeyEvent", params);
-            params.put("type", "keyUp");
-            ((ChromeDriver) driver).executeCdpCommand("Input.dispatchKeyEvent", params);
+            dispatchCdpShortcut((ChromeDriver) driver);
         }
+    }
+
+    private void dispatchCdpShortcut(ChromeDriver chrome) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("type", "keyDown");
+        params.put("key", "Alt");
+        params.put("code", "AltLeft");
+        params.put("windowsVirtualKeyCode", 18);
+        params.put("modifiers", 1);
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
+
+        params.put("key", "Shift");
+        params.put("code", "ShiftLeft");
+        params.put("windowsVirtualKeyCode", 16);
+        params.put("modifiers", 9);
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
+
+        params.put("key", "D");
+        params.put("code", "KeyD");
+        params.put("keyCode", 68);
+        params.put("windowsVirtualKeyCode", 68);
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
+        params.put("type", "keyUp");
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
+
+        params.put("key", "Shift");
+        params.put("code", "ShiftLeft");
+        params.put("keyCode", 16);
+        params.put("windowsVirtualKeyCode", 16);
+        params.put("modifiers", 1);
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
+
+        params.put("key", "Alt");
+        params.put("code", "AltLeft");
+        params.put("keyCode", 18);
+        params.put("windowsVirtualKeyCode", 18);
+        params.put("modifiers", 0);
+        chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
     }
 
     public boolean isOpen() {
