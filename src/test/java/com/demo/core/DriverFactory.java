@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -59,7 +60,9 @@ public class DriverFactory {
                     options = chromeOptions();
                     break;
             }
-            return new RemoteWebDriver(new URL(remoteUrl), options);
+            RemoteWebDriver driver = new RemoteWebDriver(new URL(remoteUrl), options);
+            driver.setFileDetector(new LocalFileDetector());
+            return driver;
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Invalid remote.url", e);
         }
