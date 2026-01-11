@@ -27,11 +27,13 @@ public class DebugPanelPage extends BasePage {
     }
 
     public void toggleShowTestIds() {
-        click(showTestIds);
+        // CI runs can have overlay timing issues; JS click avoids intercepted clicks.
+        jsClick(showTestIds);
     }
 
     public void toggleOffline() {
-        click(simulateOffline);
+        // CI runs can have overlay timing issues; JS click avoids intercepted clicks.
+        jsClick(simulateOffline);
     }
 
     public void selectNetworkProfile(String value) {

@@ -32,7 +32,8 @@ public class TablesPage extends BasePage {
     }
 
     public void nextCursorPage() {
-        click(cursorNext);
+        // CI runs can have overlay timing issues; JS click avoids intercepted clicks.
+        jsClick(cursorNext);
     }
 
     public void nextOffsetPage() {
