@@ -5,7 +5,6 @@ import com.demo.pages.DebugPanelPage;
 import java.time.Duration;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DebugPanelTests extends BaseTest {
 
     @Test
-    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     void debugPanelToggles() {
         openPath("/");
         waitForAppReady();
