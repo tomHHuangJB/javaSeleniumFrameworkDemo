@@ -48,7 +48,7 @@ public class DebugPanelPage extends BasePage {
 
     private void dispatchCdpShortcut(ChromeDriver chrome) {
         Map<String, Object> params = new HashMap<>();
-        params.put("type", "keyDown");
+        params.put("type", "rawKeyDown");
         params.put("key", "Alt");
         params.put("code", "AltLeft");
         params.put("windowsVirtualKeyCode", 18);
@@ -61,14 +61,20 @@ public class DebugPanelPage extends BasePage {
         params.put("modifiers", 9);
         chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
 
+        params.put("type", "keyDown");
         params.put("key", "D");
         params.put("code", "KeyD");
         params.put("keyCode", 68);
         params.put("windowsVirtualKeyCode", 68);
+        params.put("text", "D");
+        params.put("unmodifiedText", "d");
         chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
         params.put("type", "keyUp");
+        params.put("text", "");
+        params.put("unmodifiedText", "");
         chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
 
+        params.put("type", "keyUp");
         params.put("key", "Shift");
         params.put("code", "ShiftLeft");
         params.put("keyCode", 16);
@@ -76,6 +82,7 @@ public class DebugPanelPage extends BasePage {
         params.put("modifiers", 1);
         chrome.executeCdpCommand("Input.dispatchKeyEvent", params);
 
+        params.put("type", "keyUp");
         params.put("key", "Alt");
         params.put("code", "AltLeft");
         params.put("keyCode", 18);
