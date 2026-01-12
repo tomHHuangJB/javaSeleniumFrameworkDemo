@@ -25,6 +25,7 @@ public class DebugPanelPage extends BasePage {
 
     public void openPanel() {
         waits.pageReady();
+        ((JavascriptExecutor) driver).executeScript("window.focus(); if (document.body) { document.body.focus(); }");
         WebElement body = driver.findElement(By.tagName("body"));
         body.click();
         body.sendKeys(Keys.chord(Keys.ALT, Keys.SHIFT, "d"));
@@ -33,16 +34,22 @@ public class DebugPanelPage extends BasePage {
         }
         if (!isOpen()) {
             ((JavascriptExecutor) driver).executeScript(
-                "const evt = (type) => new KeyboardEvent(type, {key:'D', code:'KeyD', keyCode:68, which:68, altKey:true, shiftKey:true, bubbles:true, cancelable:true});"
+                "const fire = (key) => {"
+                    + "const evt = (type) => new KeyboardEvent(type, {key, code:'KeyD', keyCode:68, which:68, altKey:true, shiftKey:true, bubbles:true, cancelable:true});"
                     + "document.dispatchEvent(evt('keydown'));"
                     + "document.dispatchEvent(evt('keyup'));"
                     + "window.dispatchEvent(evt('keydown'));"
                     + "window.dispatchEvent(evt('keyup'));"
+                    + "};"
+                    + "fire('d');"
+                    + "fire('D');"
             );
         }
         if (!isOpen() && driver instanceof ChromeDriver) {
             // Linux can intercept Alt+Shift; CDP dispatch is a reliable fallback in headless CI.
-            dispatchCdpShortcut((ChromeDriver) driver);
+            ChromeDriver chrome = (ChromeDriver) driver;
+            chrome.executeCdpCommand("Page.bringToFront", new HashMap<>());
+            dispatchCdpShortcut(chrome);
         }
     }
 
